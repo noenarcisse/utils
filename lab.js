@@ -3,60 +3,79 @@ import * as Perl from './js/perl.utils.js';
 
 const content = document.body.querySelector('.console');
 
-function say(cmd)
-{
-	let bOL = document.createElement("span");
-	bOL.textContent = ">"
-	bOL.className="beginOfLine";
+//genius de Gemini qui exploite l'anonyme pour recupérer le texte pur dans la fn 
+//et dodge le eval qui cache la colo syntaxique
+function say(fn) {
+    
+    // 1. Extraction propre de l'expression (le code source de la fonction)
+    // On retire "() => ", les accolades éventuelles et les retours à la ligne
+    let expression = fn.toString()
+        .replace(/^\s*\(\)\s*=>\s*/, '') // Enlève () => {   }
+        .replace(/^{|}$/g, '')           
+        .trim();
 
-	let divCmd = document.createElement("div");
-	let span2Cmd = document.createElement("span");
-	span2Cmd.textContent = "say("+cmd+")";	
-	
+    // 2. Création de la ligne de commande (Affichage du code)
+    let divCmd = document.createElement("div");
+    divCmd.className = "line-cmd";
+    divCmd.innerHTML = `<span class="beginOfLine"> > </span><span class="cmd">${expression}</span>`;
+    content.appendChild(divCmd);
 
-	divCmd.appendChild(bOL);
-	divCmd.appendChild(span2Cmd);
+    // 3. Exécution et récupération du résultat
+    let resultat;
+    let isError = false;
 
-	span2Cmd.className="cmd";
-	content.appendChild(divCmd);
+    try {
+        resultat = fn();
+    } catch (e) {
+        resultat = e.message;
+        isError = true;
+    }
 
-	let div = document.createElement("div");
-	let span2 = document.createElement("span");
+    // 4. Création de la ligne de résultat
+    let divRes = document.createElement("div");
+    let spanRes = document.createElement("span");
+    
+    // Formatage du résultat (gestion des objets et des erreurs)
+    if (isError) {
+        spanRes.className = "result error";
+        spanRes.textContent = "Error: " + resultat;
+    } else {
+        spanRes.className = "result";
+        spanRes.textContent = (typeof resultat === 'object') ? JSON.stringify(resultat) : resultat;
+    }
 
-	div.appendChild(bOL.cloneNode(true));
-	span2.textContent = eval(cmd);
-	span2.className = "result";	
-	div.appendChild(span2);
-	content.appendChild(div);
+    divRes.innerHTML = `<span class="beginOfLine"> > </span>`; // Indentation pour le résultat
+    divRes.appendChild(spanRes);
+    content.appendChild(divRes);
+    
+    // Optionnel : Scroll automatique vers le bas
+    content.scrollTop = content.scrollHeight;
 }
+
 
 let str = "Zz"
 	
-// say(str = str.inc())
-// say(str = str.inc())
-// say(str = str.inc())
-// say(str = str.inc())
 
 for(let i=0; i<3; i++)
 {
-	say("str = Perl.strInc(str)")
+	say(() => str = Perl.strInc(str))
 }
 
 for(let i=0; i<10; i++)
 {
-	say("str = Perl.StrDec(str)")
+	say(() => str = Perl.StrDec(str))
 }
-say("Perl.StrDec('a')");
-say("Perl.StrDec('b')");
+say(() => Perl.StrDec('a'));
+say(() => Perl.StrDec('b'));
 
 
 
 
 
 	let c = new Color(255, 0, 0, .5);
-	say("c.toString()");	
-	say("c.swizzle('gbr').toString()");
-	say("c.swizzle('gbr').swizzle('argb').toString()");
+	say(() => c.toString());	
+	say(() => c.swizzle('gbr').toString());
+	say(() => c.swizzle('gbr').swizzle('argb').toString());
 	
 	let c1 = new Color(1,1,1,.2);
 	
@@ -77,17 +96,17 @@ say("Perl.StrDec('b')");
 	// say(c6);
 	
 
-	say("c1.toString()");
-	say("c2.toString()");
-	say("c21.toString()");
-	say("c22.toString()");
-	say("c3.toString()");
-	say("c4.toString()");
-	say("c2.toHex()");
+	say(() => c1.toString());
+	say(() => c2.toString());
+	say(() => c21.toString());
+	say(() => c22.toString());
+	say(() => c3.toString());
+	say(() => c4.toString());
+	say(() => c2.toHex());
 	
-	say("c4.toString()");
+	say(() => c4.toString());
 	
-	say("c5.toString()");
+	say(() => c5.toString());
 
 	
 
