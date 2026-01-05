@@ -6,7 +6,7 @@
 /**
  * 
  */
-class Color
+export class Color
 {
 	/**
 	 * 
@@ -133,7 +133,7 @@ class Color
 						b: this.b, 
 						a: this.a 
     	};
-		
+
 		// On sépare la chaîne (ex: "gr") en tableau (ex: ["g", "r"])
 		const channels = pattern.toLowerCase().split("");
 

@@ -13,7 +13,7 @@
 export function PerlIncrement(str)
 {
 	//regex du str pour verifier /^[a-z]+$/i
-	reg = /^[a-z]+$/i;
+	let reg = /^[a-z]+$/i;
 	if(!reg.test(str))
 		throw new Error("PerlIncrement: argument must be a string of alphabetical characters only");
 
@@ -51,7 +51,7 @@ export function PerlIncrement(str)
  */
 export function PerlDecrement(str) 
 {
-	reg = /^[a-z]+$/i;
+	let reg = /^[a-z]+$/i;
 	if(!reg.test(str))
 		throw new Error("PerlIncrement: argument must be a string of alphabetical characters only");
 
@@ -102,3 +102,4 @@ function shiftLeft(i)
 		return i+25;
 	return --i;
 }
+
