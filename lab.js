@@ -33,7 +33,10 @@ function say(t)
 	content.appendChild(div);
 }
 
-	let c = new Color(255, 250, 1);
+	let c = new Color(255, 0, 0, .5);
+	say(c.toString());	
+	say(c.swizzle("gbr").toString());
+	say(c.swizzle("gbr").swizzle("argb").toString());
 	
 	let c1 = new Color(1,1,1,.2);
 	
@@ -53,7 +56,7 @@ function say(t)
 	// let c6 = new Color("#F00");
 	// say(c6);
 	
-	say(c.toString());
+
 	say(c1.toString());
 	say(c2.toString());
 	say(c21.toString());

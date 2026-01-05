@@ -1,21 +1,26 @@
-//faut terminer les lancement d'erreur en cas de value off en arg1
+//TBD saturate (keep higher color and diminish 1 or 2 others channels)
 
-
-// Idée : Ajouter une méthode lighten(amount) ou saturate(amount).
+//tdb color hexa avec alpha #FFFFFFF00
+//tdb color as objet litt {r,g,b,a}
 
 /**
- * 
+ * Color object with possible manipulation of a color
+ * @class
  */
 export class Color
 {
 	/**
-	 * 
-	 * @param {*} arg1 
-	 * @param {*} arg2?
-	 * @param {*} arg3?
-	 * @param {*} arg4? 
+	 * Constructor
+	 * @param {number|string|Array<number>} arg1 - The source of the color.
+	 * Can be:
+	 * - The red channel
+	 * - A string representing the CSS string rgb(), rgba(), #FF00FF
+	 * - An array of numbers with or without alpha such as [255,0,255,0.5]
+	 * @param {number} [arg2] - The green channel of the color
+	 * @param {number} [arg3] - The blue channel of the color
+	 * @param {number} [arg4=1] - The alpha channel of the color
 	 */
-	constructor(arg1, arg2, arg3, arg4)
+	constructor(arg1, arg2, arg3, arg4=1)
 	{
 		let r,g,b;
 		let a = null;
@@ -101,10 +106,6 @@ export class Color
 		if (!(isColorValue(r) && isColorValue(g) && isColorValue(b))) 
 			throw new Error("RGB (" + r + " " + g + " " + b + ") values are not [0-255]");
 		
-
-		if(a == null)
-			a=1;
-		
 		if(!isAlphaValue(a))
 			throw new Error("Alpha value is not [0-1]");
 
@@ -124,26 +125,45 @@ export class Color
 		}
 	}
 
-	swizzle(pattern) {
+	/**
+	 * 
+	 * @param {Object} pattern 
+	 * @returns 
+	 */
+	swizzle(pattern) 
+	{
+		const old = {
+			r: this.r,
+			g: this.g,
+			b: this.b,
+			a: this.a * 255 //normalisation temp de channel A
+		};
 
-		//dico de base
-		const old = { 
-						r: this.r, 
-						g: this.g, 
-						b: this.b, 
-						a: this.a 
-    	};
-
-		// On sépare la chaîne (ex: "gr") en tableau (ex: ["g", "r"])
 		const channels = pattern.toLowerCase().split("");
 
-		// swizzling for real
-		if (channels.length > 0) this.r = old[channels[0]] ?? this.r;
-		if (channels.length > 1) this.g = old[channels[1]] ?? this.g;
-		if (channels.length > 2) this.b = old[channels[2]] ?? this.b;
-		if (channels.length > 3) this.a = old[channels[3]] ?? this.a;
+		// 2. Swizzling : les valeurs s'échangent sans perte d'échelle
+		if (channels.length > 0) this.r = old[channels[0]] ?? old.r;
+		if (channels.length > 1) this.g = old[channels[1]] ?? old.g;
+		if (channels.length > 2) this.b = old[channels[2]] ?? old.b;
 
-		return this; // chaining
+		let newAlphaIn255;
+		if (channels.length > 3) 
+		{
+			newAlphaIn255 = old[channels[3]] ?? (this.a * 255);
+		} 
+		else 
+		{
+			newAlphaIn255 = old.a;
+		}
+
+		// retour a un alpha float entre 0 - 1
+		this.a = newAlphaIn255 / 255;
+
+		this.r = Math.round(this.r);
+		this.g = Math.round(this.g);
+		this.b = Math.round(this.b);
+
+		return this;
 	}
 	lighten(add)
 	{
