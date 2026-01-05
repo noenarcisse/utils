@@ -8,6 +8,16 @@
 <meta name="robot" content="index, follow" />
 <meta http-equiv="pragma" content="no-cache" />
 <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+
+<!-- lock des header sur l'url locale aucun acces externe -->
+<meta http-equiv="Content-Security-Policy" content="
+    default-src 'self'; 
+    script-src 'self'; 
+    connect-src 'self'; 
+    form-action 'self'; 
+    object-src 'none'; 
+    frame-ancestors 'none';">
+
 <!-- <link rel="stylesheet" media="screen" type="text/css" title="copyPasta_default_design" href="index_stylesheet_1.css" /> -->
 <link rel="icon" href="data:,">
 <title>Workspace</title>
@@ -53,6 +63,12 @@
 <body>
 	<div class="console">
 	</div>
+	<input type="text" 
+       id="consoleInput" 
+       autocomplete="off" 
+       autocorrect="off" 
+       autocapitalize="off" 
+       spellcheck="false">
 </body>
 
 </html>
