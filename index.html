@@ -12,50 +12,17 @@
 <!-- lock des header sur l'url locale aucun acces externe -->
 <meta http-equiv="Content-Security-Policy" content="
     default-src 'self'; 
-    script-src 'self'; 
-    connect-src 'self'; 
-    form-action 'self'; 
-    object-src 'none'; 
-    frame-ancestors 'none';">
+    script-src 'self' 'unsafe-inline' 'unsafe-eval'; 
+    style-src 'self' 'unsafe-inline';
+    connect-src 'self' ws:; 
+    form-action 'self';">
 
-<!-- <link rel="stylesheet" media="screen" type="text/css" title="copyPasta_default_design" href="index_stylesheet_1.css" /> -->
+<link rel="stylesheet" media="screen" type="text/css" title="default_design" href="./console.css" />
 <link rel="icon" href="data:,">
 <title>Workspace</title>
 
-<style>
-	body
-	{
-		background: rgb(67, 67, 67);
-		color:rgb(153, 153, 153);
-		padding:20px;
-
-		font-family: Roboto;
-		font-size: 11px;
-	}
-	.console
-	{
-		background: rgb(36, 36, 36);
-		padding:20px;
-		border:1px solid gray;
-		border-radius:2px;
-	}
-	.beginOfLine
-	{
-		padding-right:20px;
-	}
-	.console .cmd
-	{
-		color: rgb(185, 162, 32);
-	}
-	.console .result
-	{
-		color:rgb(66, 155, 66);
-	}
-
-</style>
-
-<script src="../js/Color.js" type="module"></script>
-<script src="../js/perl.utils.js" type="module"></script>
+<script src="./js/Color.js" type="module"></script>
+<script src="./js/perl.utils.js" type="module"></script>
 <script src="./lab.js" type="module" ></script>
 
 </head>
