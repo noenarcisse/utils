@@ -1,5 +1,5 @@
 import {Color} from './js/Color.js'
-import { PerlIncrement, PerlDecrement } from '../js/perl-string.utils.js';
+import { PerlIncrement, PerlDecrement } from './js/perl-string.utils.js';
 
 const content = document.body.querySelector('.content');
 
