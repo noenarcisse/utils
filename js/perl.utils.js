@@ -1,16 +1,17 @@
 /**
- * PerlString Utils
- * Fournit une incrémentation et décrémentation de chaînes compatible avec Perl.
+ * Perl Utils
+ * Attempt to replicate the goodstuff from Perl.
  */
- 
- 
 
+// ------------------------------
+// PERL STRINGS
+// ------------------------------
 /**
  * Incrémente une chaine de caractères alphabétique sur le modèle de Perl
  * @param {string} str 
- * @returns 
+ * @returns {string}
  */
-export function PerlIncrement(str)
+export function strInc(str)
 {
 	//regex du str pour verifier /^[a-z]+$/i
 	let reg = /^[a-z]+$/i;
@@ -47,9 +48,9 @@ export function PerlIncrement(str)
 /**
  * Décrémente une chaine de caractères alphabétique. Retourne une chaine vide si la chaine de départ était "a".
  * @param {string} str 
- * @returns 
+ * @returns {string}
  */
-export function PerlDecrement(str) 
+export function StrDec(str) 
 {
 	let reg = /^[a-z]+$/i;
 	if(!reg.test(str))

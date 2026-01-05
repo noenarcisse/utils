@@ -1,8 +1,34 @@
 import {Color} from './js/Color.js'
-import { PerlIncrement, PerlDecrement } from './js/perl-string.utils.js';
+import * as Perl from './js/perl.utils.js';
 
-const content = document.body.querySelector('.content');
+const content = document.body.querySelector('.console');
 
+function say(cmd)
+{
+	let bOL = document.createElement("span");
+	bOL.textContent = ">"
+	bOL.className="beginOfLine";
+
+	let divCmd = document.createElement("div");
+	let span2Cmd = document.createElement("span");
+	span2Cmd.textContent = "say("+cmd+")";	
+	
+
+	divCmd.appendChild(bOL);
+	divCmd.appendChild(span2Cmd);
+
+	span2Cmd.className="cmd";
+	content.appendChild(divCmd);
+
+	let div = document.createElement("div");
+	let span2 = document.createElement("span");
+
+	div.appendChild(bOL.cloneNode(true));
+	span2.textContent = eval(cmd);
+	span2.className = "result";	
+	div.appendChild(span2);
+	content.appendChild(div);
+}
 
 let str = "Zz"
 	
@@ -13,30 +39,24 @@ let str = "Zz"
 
 for(let i=0; i<3; i++)
 {
-	say(str = PerlIncrement(str))
+	say("str = Perl.strInc(str)")
 }
 
 for(let i=0; i<10; i++)
 {
-	say(str = PerlDecrement(str))
+	say("str = Perl.StrDec(str)")
 }
-say(PerlDecrement("a"));
-say(PerlDecrement("b"));
+say("Perl.StrDec('a')");
+say("Perl.StrDec('b')");
 
 
 
-function say(t)
-{
-	console.log(t);
-	let div = document.createElement("div");
-	div.textContent = t;
-	content.appendChild(div);
-}
+
 
 	let c = new Color(255, 0, 0, .5);
-	say(c.toString());	
-	say(c.swizzle("gbr").toString());
-	say(c.swizzle("gbr").swizzle("argb").toString());
+	say("c.toString()");	
+	say("c.swizzle('gbr').toString()");
+	say("c.swizzle('gbr').swizzle('argb').toString()");
 	
 	let c1 = new Color(1,1,1,.2);
 	
@@ -57,17 +77,17 @@ function say(t)
 	// say(c6);
 	
 
-	say(c1.toString());
-	say(c2.toString());
-	say(c21.toString());
-	say(c22.toString());
-	say(c3.toString());
-	say(c4.toString());
-	say(c2.toHex());
+	say("c1.toString()");
+	say("c2.toString()");
+	say("c21.toString()");
+	say("c22.toString()");
+	say("c3.toString()");
+	say("c4.toString()");
+	say("c2.toHex()");
 	
-	say(c4.toString());
+	say("c4.toString()");
 	
-	say(c5.toString());
+	say("c5.toString()");
 
 	
 

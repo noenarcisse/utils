@@ -13,20 +13,45 @@
 <title>Workspace</title>
 
 <style>
-	body{
+	body
+	{
 		background: rgb(67, 67, 67);
 		color:rgb(153, 153, 153);
+		padding:20px;
+
+		font-family: Roboto;
+		font-size: 11px;
 	}
+	.console
+	{
+		background: rgb(36, 36, 36);
+		padding:20px;
+		border:1px solid gray;
+		border-radius:2px;
+	}
+	.beginOfLine
+	{
+		padding-right:20px;
+	}
+	.console .cmd
+	{
+		color: rgb(185, 162, 32);
+	}
+	.console .result
+	{
+		color:rgb(66, 155, 66);
+	}
+
 </style>
 
 <script src="../js/Color.js" type="module"></script>
-<script src="../js/perl-string.utils.js" type="module"></script>
+<script src="../js/perl.utils.js" type="module"></script>
 <script src="./lab.js" type="module" ></script>
 
 </head>
 
 <body>
-	<div class="content">
+	<div class="console">
 	</div>
 </body>
 
