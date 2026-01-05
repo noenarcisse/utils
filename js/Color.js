@@ -125,10 +125,19 @@ export class Color
 		}
 	}
 
+	add()
+	{
+
+	}
+	sub()
+	{
+
+	}
+
 	/**
-	 * 
-	 * @param {Object} pattern 
-	 * @returns 
+	 * Swizzle the channels of a color based on the pattern
+	 * @param {string} pattern - A pattern of rgba letters with the correct order of the swizzle
+	 * @returns {this} - The current instance of Color for chaining purpose
 	 */
 	swizzle(pattern) 
 	{
@@ -165,6 +174,11 @@ export class Color
 
 		return this;
 	}
+
+	/**
+	 * Lighten the color
+	 * @param {number} add - The absolute number to add to the overall Color luminance
+	 */
 	lighten(add)
 	{
 		add=Math.abs(add);
@@ -172,6 +186,10 @@ export class Color
 		this.g = this.clampColor(this.g+add);
 		this.b = this.clampColor(this.b+add);
 	}
+	/**
+	 * Darken the color
+	 * @param {number} sub - The absolute number to subtract from the overall Color luminance
+	 */
 	darken(sub)
 	{
 		sub=Math.abs(sub);
@@ -187,14 +205,34 @@ export class Color
 		return c
 	}
 
+	/**
+	 * Returns a string of the color
+	 * @returns {string} - The string of the color in a format : "R:x G:x B:x A:x"
+	 */
 	toString()
 	{
 		return 'R:'+this.r+' G:'+this.g+' B:'+this.b+' A:'+this.a;
 	}
+	/**
+	 * Returns the RGB value of the color
+	 * @returns {string} - A CSS rgb format
+	 */
 	toRgb()
 	{
 		return `rgb(${this.r},${this.g},${this.b})`;
 	}
+	/**
+	 * Returns the RGBA value of the color
+	 * @returns {string} - A CSS rgba format
+	 */
+	toRgba()
+	{
+		return `rgb(${this.r},${this.g},${this.b},${this.a})`;
+	}
+	/**
+	 * Returns the hexadecimal value of the color
+	 * @returns {string} - A CSS hexadecimal format
+	 */
 	toHex()
 	{
 		const _r = Math.round(this.r).toString(16).padStart(2, '0');
