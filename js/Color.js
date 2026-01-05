@@ -45,7 +45,7 @@ class Color
 				let reg =  /^rgb\(\s*[0-9]{0,3}[\s,]+[0-9]{0,3}[\s,]+[0-9]{1,3}\s*\)$/i;
 
 				if (regRGBA.test(arg1)) {
-					col = arg1.match(/\d+\.?\d*/g); // On extrait les 4 nombres
+					col = arg1.match(/\d+\.?\d*/g); // 4 deci avec . possible
 					
 					r = parseInt(col[0]);
 					g = parseInt(col[1]);
@@ -55,7 +55,7 @@ class Color
 					if (col[3].match(/^[01](\.[0-9]+)?$/)) {
 						a = parseFloat(col[3]);
 					} else {
-						throw new Error("Alpha value must be between 0 and 1 (e.g., 0.5)");
+						throw new Error("Alpha value must be a float between 0 and 1");
 					}
 				}
 				else if(reg.test(arg1)) //string rgb (255, 255, 255)
@@ -123,17 +123,58 @@ class Color
 			return ((a >= 0) && (a <= 1));
 		}
 	}
-	
+
+	swizzle(pattern) {
+
+		//dico de base
+		const old = { 
+						r: this.r, 
+						g: this.g, 
+						b: this.b, 
+						a: this.a 
+    	};
+		
+		// On sépare la chaîne (ex: "gr") en tableau (ex: ["g", "r"])
+		const channels = pattern.toLowerCase().split("");
+
+		// swizzling for real
+		if (channels.length > 0) this.r = old[channels[0]] ?? this.r;
+		if (channels.length > 1) this.g = old[channels[1]] ?? this.g;
+		if (channels.length > 2) this.b = old[channels[2]] ?? this.b;
+		if (channels.length > 3) this.a = old[channels[3]] ?? this.a;
+
+		return this; // chaining
+	}
+	lighten(add)
+	{
+		add=Math.abs(add);
+		this.r = this.clampColor(this.r+add);
+		this.g = this.clampColor(this.g+add);
+		this.b = this.clampColor(this.b+add);
+	}
+	darken(sub)
+	{
+		sub=Math.abs(sub);
+		this.r = this.clampColor(this.r-sub);
+		this.g = this.clampColor(this.g-sub);
+		this.b = this.clampColor(this.b-sub);
+	}
+
+	clampColor(c)
+	{
+		if(c > 255) c=255;
+		if(c < 0) c=0;
+		return c
+	}
+
 	toString()
 	{
 		return 'R:'+this.r+' G:'+this.g+' B:'+this.b+' A:'+this.a;
 	}
-	
 	toRgb()
 	{
 		return `rgb(${this.r},${this.g},${this.b})`;
 	}
-	
 	toHex()
 	{
 		const _r = Math.round(this.r).toString(16).padStart(2, '0');
@@ -142,11 +183,6 @@ class Color
 
 		return `#${_r}${_g}${_b}`.toUpperCase();
 	}
-
 }
-
-// clamp rgb values
-// C'est une source d'erreur classique : un calcul donne 256 ou -1. Pour éviter que le CSS ne rejette la couleur, tu peux "clamer" les valeurs.
-//     La logique : R=max(0,min(255,R))
 
 export default Color;
