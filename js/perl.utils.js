@@ -50,7 +50,7 @@ export function strInc(str)
  * @param {string} str 
  * @returns {string}
  */
-export function StrDec(str) 
+export function strDec(str) 
 {
 	let reg = /^[a-z]+$/i;
 	if(!reg.test(str))
