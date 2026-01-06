@@ -4,9 +4,25 @@ import * as Console from './console.js';
 import {Color} from './js/Color.js'
 import * as Perl from './js/perl.utils.js';
 
-const content = document.body.querySelector('.console');
 
+//TEMP whitelist system
+// const registry = { Perl, Color }; // Vous listez juste les imports une fois
 
+// const whitelist = {};
+
+// Object.entries(registry).forEach(([name, content]) => {
+//     // Si c'est une classe (possède un prototype)
+//     if (typeof content === 'function' && content.prototype) {
+//         whitelist[name] = Object.getOwnPropertyNames(content.prototype)
+//                                 .filter(m => m !== 'constructor');
+//     } 
+//     // Si c'est un module/objet
+//     else {
+//         whitelist[name] = Object.keys(content).filter(k => typeof content[k] === 'function');
+//     }
+// });
+
+// Console.register(whitelist);
 
 
 let str = "Zz"
