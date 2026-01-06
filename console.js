@@ -1,4 +1,10 @@
-const whitelist ='';
+
+//refacto hard
+//whitelist ?
+//blacklist correctement pour pouvoir lever ou ajouter des elements
+const whitelist ={};
+const blacklist={};
+
 
 const content = document.body.querySelector('.console');
 //YOLO
