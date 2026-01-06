@@ -15,15 +15,10 @@ input.addEventListener("keypress", (e) => {
 });
 
 
+export function register(classes) {
+    Object.assign(scope, classes);
+}
 
-//verifier l'input user
-//laisser les gens s'auto hack localement si ca les amuse
-
-
-//refacto sortir la console.js hors du lab et import here
-
-//genius de Gemini qui exploite l'anonyme pour recupérer le texte pur dans la fn 
-//et dodge le eval qui cache la colo syntaxique
 export function say(fn) 
 {
     let expression = fn.toString()
@@ -66,49 +61,58 @@ export function say(fn)
     content.scrollTop = content.scrollHeight;
 }
 
+//draft, cut clone and c/c by splitting subroutines
+function sayUser(cmd)
+{
+    //cmd is a string entered by user already treated
 
+    let divCmd = document.createElement("div");
+    divCmd.className = "line-cmd";
+    divCmd.innerHTML = `<span class="beginOfLine"> > </span><span class="cmd">${cmd}</span>`;
+    content.appendChild(divCmd);
+
+    let resultat;
+    let isError = false;
+    try 
+    {
+        let runner = new Function("return "+cmd);
+        resultat = runner();
+    } 
+    catch (e) 
+    {
+        resultat = e.message;
+        isError = true;
+    }
+
+    let divRes = document.createElement("div");
+    let spanRes = document.createElement("span");
+    
+    if (isError) {
+        spanRes.className = "result error";
+        spanRes.textContent = "Error: " + resultat;
+    } else {
+        spanRes.className = "result";
+        spanRes.textContent = (typeof resultat === 'object') ? JSON.stringify(resultat) : resultat;
+    }
+
+    divRes.innerHTML = `<span class="beginOfLine"> > </span>`; // Indentation pour le résultat
+    divRes.appendChild(spanRes);
+    content.appendChild(divRes);
+
+    content.scrollTop = content.scrollHeight;
+}
 
 function submitForm(input) {
     console.log("USER INPUT : " + input.value);
+    readCmd(input.value);
     input.value = '';
 }
-function readCmd(userCmd)
+function readCmd(cmd)
 {
-    let cmd;
-
-    if(lockXSS(userCmd) | lockFunCall(userCmd))
+    if(lockXSS(cmd) | lockFnCall(cmd))
         throw new Error("Forbidden command found. Execution blocked.");
 
-    cmd=userCmd;
-    let regObj;
-    let regFn;
-    //si read obj
-    if(regObj.test(cmd))
-    {
-        execObj(cmd);
-    }
-    //si read fn
-    if(regFn)
-    {
-        execFn(cmd)
-    }
-}
-
-function execObj(cmd)
-{
-    try
-    {
-
-    }
-    catch(e)
-    {
-
-    }
-}
-
-function execFn(cmd)
-{
-
+    sayUser(cmd);
 }
 
 //empecher les XSS
