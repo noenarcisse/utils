@@ -99,7 +99,7 @@ function sayUser(cmd)
         spanRes.textContent = "Error: " + resultat;
     } else {
         spanRes.className = "result";
-        spanRes.textContent = (typeof resultat === 'object') ? JSON.stringify(resultat) : resultat;
+        spanRes.textContent = (typeof resultat === 'object') ? JSON.stringify(resultat) : `${resultat}`;
     }
 
     divRes.innerHTML = `<span class="beginOfLine"> > </span>`; // Indentation pour le résultat
@@ -125,13 +125,13 @@ function readCmd(cmd)
 //empecher les XSS
 function lockXSS(cmd)
 {
-    let reg = /fetch|XMLHttpRequest/;
+    let reg = /fetch|XMLHttpRequest/i;
     return reg.test(cmd);
 }
 //interdire les mot clé function et => pour emplecher les callbacks
 function lockFnCall(cmd)
 {
-    let reg = /function|=>/;
+    let reg = /function|=>/i;
     return reg.test(cmd);
 }
 
