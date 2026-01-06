@@ -5,6 +5,31 @@
 const whitelist ={};
 const blacklist={};
 
+//limit the size of this at some point
+let histo = [] //string[]
+let iHisto=0;
+
+    console.log(histo);
+
+function logHisto(str)
+{
+    histo.unshift(str);
+}
+
+function browseHisto(n)
+{
+    if(n > 0 && iHisto+n < histo.length)
+    {
+        iHisto += n;
+        input.value = histo[iHisto];
+    }
+    if(n < 0 && (iHisto+n) >= 0)
+    {
+        iHisto += n;
+        input.value = histo[iHisto];
+    }
+}
+
 
 const content = document.body.querySelector('.console');
 //YOLO
@@ -14,9 +39,24 @@ console.log(input)
 //validBtn.addEventListener("click", () => {console.log("do stuff 2")});
 
 //LISTENERS
-input.addEventListener("keypress", (e) => {
+input.addEventListener("keyup", (e) => {
+
+    //console.log(e.key);
     if (e.key === "Enter") {
-        submitForm(e.target)
+        logHisto(e.target.value);
+        submitForm(e.target);
+    }
+    else if(e.key === "ArrowUp")
+    {
+        browseHisto(1)
+    }
+    else if(e.key === "ArrowDown")
+    {
+        browseHisto(-1)
+    }
+    else
+    {
+        iHisto=-1;
     }
 });
 

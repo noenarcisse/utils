@@ -4,7 +4,7 @@ import * as Console from './console.js';
 import {Color} from './js/Color.js'
 import * as Perl from './js/perl.utils.js';
 
-Console.register({Color});
+Console.register({Color, Perl});
 
 //TEMP whitelist system
 // const registry = { Perl, Color }; // Vous listez juste les imports une fois
