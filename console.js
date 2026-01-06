@@ -14,9 +14,13 @@ input.addEventListener("keypress", (e) => {
     }
 });
 
+// init par register()
+let localScope = {};
+
+
 
 export function register(classes) {
-    Object.assign(scope, classes);
+    localScope = { ...localScope, ...classes };
 }
 
 export function say(fn) 
@@ -75,8 +79,11 @@ function sayUser(cmd)
     let isError = false;
     try 
     {
-        let runner = new Function("return "+cmd);
-        resultat = runner();
+        const keys = Object.keys(localScope);
+        const values = Object.values(localScope);
+        
+        let runner = new Function(...keys, `return ${cmd}`);
+        resultat = runner(...values);
     } 
     catch (e) 
     {
@@ -109,8 +116,8 @@ function submitForm(input) {
 }
 function readCmd(cmd)
 {
-    if(lockXSS(cmd) | lockFnCall(cmd))
-        throw new Error("Forbidden command found. Execution blocked.");
+    if(lockXSS(cmd) || lockFnCall(cmd))
+        error(cmd);
 
     sayUser(cmd);
 }
@@ -128,5 +135,26 @@ function lockFnCall(cmd)
     return reg.test(cmd);
 }
 
+function error(cmd) {
+
+    let divCmd = document.createElement("div");
+    divCmd.className = "line-cmd";
+    divCmd.innerHTML = `<span class="beginOfLine"> > </span><span class="cmd">${cmd}</span>`;
+    content.appendChild(divCmd);
+
+    let divRes = document.createElement("div");
+    let spanRes = document.createElement("span");
+    divRes.innerHTML = `<span class="beginOfLine"> > </span>`;
+    spanRes.textContent = "Forbidden command found. Execution rejected."
+    spanRes.className = 'error';
+    divRes.appendChild(spanRes);
+    content.appendChild(divRes);
+
+    input.value = '';
+    content.scrollTop = content.scrollHeight;
+
+    throw new Error("Forbidden command found. Execution rejected.");
+
+} 
 
 
