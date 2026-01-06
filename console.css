@@ -1,14 +1,31 @@
+	html, body
+	{
+		width:100%;
+		height:100vh;
+		margin:0;
+	}
+	*
+	{
+		box-sizing: border-box;
+	}
 	body
 	{
 		background: rgb(67, 67, 67);
 		color:rgb(153, 153, 153);
-		padding:20px;
+		padding:10px;
 
 		font-family: Roboto;
 		font-size: 11px;
 	}
 	.console
 	{
+		width:90%;
+		height:90%;
+
+		margin:auto;
+
+		overflow-y: scroll;
+		
 		background: rgb(36, 36, 36);
 		padding:20px;
 		border:1px solid gray;
@@ -25,4 +42,18 @@
 	.console .result
 	{
 		color:rgb(66, 155, 66);
+	}
+
+	.console-input
+	{
+		width:90%;
+		margin:auto;
+		padding-top:5px;
+	}
+		.console-input input
+	{
+		width:100%;
+		background-color:black;
+		color:white;
+		border:1px solid gray;
 	}
