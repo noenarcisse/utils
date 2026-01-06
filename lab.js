@@ -3,6 +3,13 @@ import * as Perl from './js/perl.utils.js';
 
 const content = document.body.querySelector('.console');
 
+//verifier l'input user
+//interdire les mot clé function et => pour emplecher les callbacks
+//laisser les gens s'auto hack localement si ca les amuse
+//empecher les XSS
+
+//refacto sortir la console.js hors du lab et import here
+
 //genius de Gemini qui exploite l'anonyme pour recupérer le texte pur dans la fn 
 //et dodge le eval qui cache la colo syntaxique
 function say(fn) {
