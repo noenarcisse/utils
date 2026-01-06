@@ -99,7 +99,7 @@ function sayUser(cmd)
         spanRes.textContent = "Error: " + resultat;
     } else {
         spanRes.className = "result";
-        spanRes.textContent = (typeof resultat === 'object') ? JSON.stringify(resultat) : `${resultat}`;
+        spanRes.textContent = `${resultat}`;
     }
 
     divRes.innerHTML = `<span class="beginOfLine"> > </span>`; // Indentation pour le résultat
