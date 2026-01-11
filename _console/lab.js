@@ -1,8 +1,8 @@
 
 import * as Console from './console.js';
 
-import {Color} from './js/Color.js'
-import * as Perl from './js/perl.utils.js';
+import {Color} from '../js/Color.js'
+import * as Perl from '../js/perl.utils.js';
 
 Console.register({Color, Perl});
 
