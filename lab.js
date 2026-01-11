@@ -26,6 +26,34 @@ Console.register({Color, Perl});
 // Console.register(whitelist);
 
 
+//magie noire
+
+let bool = "0" === 0
+Console.say(() => '"0" == 0 : ' + bool);
+
+bool = [0] == 0
+Console.say(() => '[0] == 0 : ' + bool);
+bool = [] == 0
+Console.say(() => '[] == 0 : ' + bool);
+bool = [0] === [0];
+Console.say(() => '[0] === [0]: ' + bool);
+bool = [1] == 1;
+Console.say(() => '[1] == 1: ' + bool);
+bool = [1, 2] == 2;
+Console.say(() => '[1, 2] == 2 : ' + bool);
+bool = [] == ![]
+Console.say(() => '[] == ![] : ' + bool);
+
+
+let tab = [10, -2, 29, -5, -1, 8];
+Console.say(() => tab)
+
+Console.say(() => tab.sort())
+Console.say(() => tab.sort((x,y) => x-y))
+
+
+//perl test
+
 let str = "Zz"
 	
 
@@ -40,6 +68,8 @@ for(let i=0; i<10; i++)
 }
 Console.say(() => Perl.StrDec('a'));
 Console.say(() => Perl.StrDec('b'));
+
+//color tests
 
 	let c = new Color(255, 0, 0, .5);
 	Console.say(() => c.toString());	
@@ -65,6 +95,8 @@ Console.say(() => Perl.StrDec('b'));
 //not working
     // let c6 = new Color("#F00");
     // Console.say(c6);
+
+
 
 
 	
