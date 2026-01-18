@@ -1,4 +1,5 @@
 #renamer.pl
+# attention REDOS possible ici, les args sont pas secur
 
 use strict;
 use warnings;
