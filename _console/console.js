@@ -4,7 +4,7 @@
 //blacklist correctement pour pouvoir lever ou ajouter des elements
 const whitelist ={};
 const blacklist={};
-import { History } from './history.js';
+import { History } from '../js/history.js';
 
 const histo = new History('input', 10);
 
