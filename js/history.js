@@ -4,7 +4,7 @@ export class History {
     /**
      * History class constructor
      * @param {string} textInput - The DOM selector to target the first element found.
-     * @param {number} size - The maximum size of the history
+     * @param {number} [size] - The maximum size of the history
      */
     constructor(textInput, size) {
 
