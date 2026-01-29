@@ -4,31 +4,37 @@
 //blacklist correctement pour pouvoir lever ou ajouter des elements
 const whitelist ={};
 const blacklist={};
+import { History } from './history.js';
+
+const histo = new History('input', 10);
+
+histo.Init();
+
 
 //limit the size of this at some point
-let histo = [] //string[]
-let iHisto=0;
+//let histo = [] //string[]
+// let iHisto=0;
 
-    console.log(histo);
+//     console.log(histo);
 
-function logHisto(str)
-{
-    histo.unshift(str);
-}
+// function logHisto(str)
+// {
+//     histo.unshift(str);
+// }
 
-function browseHisto(n)
-{
-    if(n > 0 && iHisto+n < histo.length)
-    {
-        iHisto += n;
-        input.value = histo[iHisto];
-    }
-    if(n < 0 && (iHisto+n) >= 0)
-    {
-        iHisto += n;
-        input.value = histo[iHisto];
-    }
-}
+// function browseHisto(n)
+// {
+//     if(n > 0 && iHisto+n < histo.length)
+//     {
+//         iHisto += n;
+//         input.value = histo[iHisto];
+//     }
+//     if(n < 0 && (iHisto+n) >= 0)
+//     {
+//         iHisto += n;
+//         input.value = histo[iHisto];
+//     }
+// }
 
 
 const content = document.body.querySelector('.console');
@@ -38,27 +44,36 @@ console.log(input)
 //const validBtn = document.querySelector('button')[0];
 //validBtn.addEventListener("click", () => {console.log("do stuff 2")});
 
-//LISTENERS
+
 input.addEventListener("keyup", (e) => {
 
     //console.log(e.key);
     if (e.key === "Enter") {
-        logHisto(e.target.value);
         submitForm(e.target);
     }
-    else if(e.key === "ArrowUp")
-    {
-        browseHisto(1)
-    }
-    else if(e.key === "ArrowDown")
-    {
-        browseHisto(-1)
-    }
-    else
-    {
-        iHisto=-1;
-    }
 });
+
+//LISTENERS
+// input.addEventListener("keyup", (e) => {
+
+//     //console.log(e.key);
+//     if (e.key === "Enter") {
+//         logHisto(e.target.value);
+//         submitForm(e.target);
+//     }
+//     else if(e.key === "ArrowUp")
+//     {
+//         browseHisto(1)
+//     }
+//     else if(e.key === "ArrowDown")
+//     {
+//         browseHisto(-1)
+//     }
+//     else
+//     {
+//         iHisto=-1;
+//     }
+// });
 
 // init par register()
 let localScope = {};
