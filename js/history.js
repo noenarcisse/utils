@@ -27,11 +27,13 @@ export class History {
 
     /**
      * Initialize the listeners on the targeted DOM element
-     * @returns 
      */
     Init() {
         if (this._target === "undefined")
+        {
+            console.log("History error: the DOM target is undefined");
             return;
+        }
 
         this._target.addEventListener("keyup", (e) => {
             if (e.key === "Enter") {
@@ -52,7 +54,7 @@ export class History {
 
     /**
      * Log the text in the history
-     * @param {string} str 
+     * @param {string} str - The text value
      */
     Log(str) {
         if(str !== "")
@@ -63,7 +65,7 @@ export class History {
 
     /**
      * Browse the entries saved in the history.
-     * @param {*} offset - The offset used to move the cursor in the history
+     * @param {number} offset - The offset used to move the cursor in the history. Can be positive or negative number.
      */
     Browse(offset) {
         if (offset > 0 && (this._cursor + offset) < this._entries.length) {
@@ -76,6 +78,9 @@ export class History {
         }
     }
 
+    /**
+     * Trim the penultimate element from the history.
+     */
     Trim()
     {
         if(this._size === "undefined")
