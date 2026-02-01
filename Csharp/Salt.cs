@@ -7,8 +7,6 @@ public static class Salt
     /// <returns></returns>
     public static string Generate()
     {
-        Console.WriteLine((char)(byte)11);
-
         byte a = (byte)'a';
         byte z = (byte)'z'+1;
         int n = Random.Shared.Next(0, 1000);
