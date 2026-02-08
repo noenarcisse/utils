@@ -1,0 +1,12 @@
+{
+  "name": "dirsize-tool",
+  "version": "1.0.0",
+  "description": "Calcul de taille de dossier trié par taille",
+  "main": "dirSize.js",
+  "bin": {
+    "dirsize": "./dirSize.js"
+  },
+  "dependencies": {
+    "fast-folder-size": "^2.4.0"
+  }
+}

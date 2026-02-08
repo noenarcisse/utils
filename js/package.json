@@ -1,0 +1,16 @@
+{
+  "name": "js",
+  "version": "1.0.0",
+  "description": "[Color.js](https://github.com/noenarcisse/utils/blob/main/js/Color.js) - Color class<br />",
+  "main": "Color.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "fast-folder-size": "^2.4.0"
+  }
+}
