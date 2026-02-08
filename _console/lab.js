@@ -51,6 +51,15 @@ Console.say(() => tab)
 Console.say(() => tab.sort())
 Console.say(() => tab.sort((x,y) => x-y))
 
+// suite de la poilade JS
+
+console.log(true * 5 + 2);
+
+console.log(typeof NaN);
+
+console.log(parseInt(0.0000000005));
+console.log(parseInt(0.0005));
+
 
 //perl test
 
