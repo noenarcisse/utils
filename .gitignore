@@ -1,7 +1,7 @@
 /lab/
 /pl/*.bat
 
-*/node_modules/*
+**/node_modules/*
 
 #fichier de tests souvent
 *.txt
