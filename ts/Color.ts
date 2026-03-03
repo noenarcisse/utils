@@ -68,6 +68,8 @@ class Color
 						throw new Error("Alpha value must be a float between 0 and 1");
 					}
 				}
+				//rgb(250.5, 120.25, 0 / 0.75) est pas pris en compte alors que valide en CSS
+				//rgb (100%, 20%, 0% ) aussi
 				else if(reg.test(arg1)) //string rgb (255, 255, 255)
 				{
 					col = arg1.match(/[0-9]{1,3}/g)!;
@@ -76,6 +78,8 @@ class Color
 					g = parseInt(col[1]);
 					b = parseInt(col[2]);
 				}
+
+				//englober fffff ff [0-9a-fA-F]{0,2} aussi ?
 				//string #ffffff
 				reg = /^[#][0-9a-fA-F]{6}/g;
 				if(reg.test(arg1))
@@ -84,6 +88,13 @@ class Color
 					r = parseInt(col[0],16);
 					g = parseInt(col[1],16);
 					b = parseInt(col[2],16);
+				}
+
+				//cas #FFFFFFFF
+				reg = /^[#][0-9a-fA-F]{8}/g;
+				if(reg.test(arg1))
+				{
+					throw new Error("Not Implemented yet.")
 				}
 
 				if(!col)
