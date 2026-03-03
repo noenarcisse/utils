@@ -47,13 +47,21 @@ class Color
 				let reg : RegExp =  /^rgb\(\s*[0-9]{0,3}[\s,]+[0-9]{0,3}[\s,]+[0-9]{1,3}\s*\)$/i;
 
 				if (regRGBA.test(arg1)) {
+					//REFACTO
+					//ca essaie de faire bcp trop
+					//ca split les 3 nombres ET le decimal de l'alpha mais en forcant le premier chiffre
+					// avant le point !
 					col = arg1.match(/\d+\.?\d*/g)!; // 4 deci avec . possible
 					
 					r = parseInt(col[0]);
 					g = parseInt(col[1]);
 					b = parseInt(col[2]);
 					
+
+					//console.log(col[3]);
 					// On vérifie si l'alpha extrait (col[3]) est valide
+					//REFACTO
+					//mauvaise regex ici, on peut pas forcer le 0 devant le . et le 1 ne peut jamais etre devant le . aussi?!
 					if (col[3].match(/^[01](\.[0-9]+)?$/)) {
 						a = parseFloat(col[3]);
 					} else {
@@ -104,7 +112,7 @@ class Color
 			typeof g === 'undefined' ||
 			typeof b === 'undefined'
 		) {
-			throw new Error("ERREUR DE COULEUR");
+			throw new Error("The color parameters are not correct.");
 		}
 		
 
@@ -116,7 +124,8 @@ class Color
 
 		// faut throw ICI pour l'erreur final si on a pas pu creer la couleur en général en polymorphe
 
-
+		//REFACTO
+		//pas de verification de int et pas float sur les RGB ?
 
 		this.a = a;
 		this.r = r;
