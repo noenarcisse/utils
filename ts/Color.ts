@@ -41,9 +41,9 @@ class Color
 			{
 				let col: string[] = [];
 
-				//string rgba (255, 255, 255)
-				//attention le [\s,]+ accepte possiblement : "255 , , 255"
-				let regRGBA : RegExp = /^rgba\(\s*[0-9]{1,3}[\s,]+[0-9]{1,3}[\s,]+[0-9]{1,3}[\s,]+[0-9.]+\s*\)$/i;
+				//string rgba (255, 255, 255, 0)
+				//aled
+				let regRGBA : RegExp = /^rgba\(\s*[0-9]{1,3}\s*,?\s*[0-9]{1,3}\s*,?\s*[0-9]{1,3}\s*,?\s*(0?\.[0-9]+|(?<![\.0-9])0|1(?![\.0-9]))+\s*\)$/i;
 				let reg : RegExp =  /^rgb\(\s*[0-9]{0,3}[\s,]+[0-9]{0,3}[\s,]+[0-9]{1,3}\s*\)$/i;
 
 				if (regRGBA.test(arg1)) {
@@ -81,21 +81,24 @@ class Color
 
 				//englober fffff ff [0-9a-fA-F]{0,2} aussi ?
 				//string #ffffff
-				reg = /^[#][0-9a-fA-F]{6}/g;
+				reg = /^[#][0-9a-fA-F]{6}([0-9a-fA-F]{2})?/g;
 				if(reg.test(arg1))
 				{
 					col = arg1.match(/[0-9a-fA-F]{2}/g)!;
 					r = parseInt(col[0],16);
 					g = parseInt(col[1],16);
 					b = parseInt(col[2],16);
+
+					if(col.length > 3)
+						a = parseInt(col[3],16)/255;
 				}
 
 				//cas #FFFFFFFF
-				reg = /^[#][0-9a-fA-F]{8}/g;
-				if(reg.test(arg1))
-				{
-					throw new Error("Not Implemented yet.")
-				}
+				// reg = /^[#][0-9a-fA-F]{8}/g;
+				// if(reg.test(arg1))
+				// {
+				// 	throw new Error("Not Implemented yet.")
+				// }
 
 				if(!col)
 					throw new Error("The color format cannot be parsed. Color as a string must be either rgb(), rgba() or an HEXA value");
