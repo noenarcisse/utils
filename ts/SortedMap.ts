@@ -1,41 +1,47 @@
-//violement windsurfed, a relire
 
 export class SortedMap<T>
 {
     private _order : number[];
-    private _map : Map<number, T>;
+    private _map : Map<number, T[]>;
 
-    constructor(map? : Map<number, T>)
+    //used for lazy sorting
+    private _isSorted : boolean;
+
+    constructor(map? : Map<number, T[]>)
     {
         if(!map)
         {
             this._order = [];
-            this._map = new Map<number, T>();
+            this._map = new Map<number, T[]>();
+            this._isSorted = false;
             return;
         }
 
         this._order = [...map.keys()];
-        this._order.sort((a, b) => a - b);
         this._map = new Map(map);
+        this._isSorted = false;
     }
 
-    get(key : number) : T | undefined
+    get(key : number) : T[] | undefined
     {
         return this._map.get(key);
     }
 
-    //Bug : set ne met pas à jour _order lors d'un update
-    //En fait ici pas de bug, mais les deux branches font this._map.set(key, value) — elles se simplifient :
     set(key : number, value : T) : void
     {
         if(this._map.has(key))
         {
-            this._map.set(key, value);
+            this._map.get(key)!.push(value);
             return;
         }
 
-        this._map.set(key, value);
-        this.sort();
+        const values : T[] =  [value];
+        this._map.set(key, values);
+        this._order.push(key);
+
+        this._isSorted = false;
+        //non
+        //this.sort();
     }
 
     delete(key : number) : void
@@ -46,44 +52,45 @@ export class SortedMap<T>
 
     getAllByOrder() : T[]
     {
-        return this._order.map(k => this._map.get(k)!);
+        this.sort();
+        return this._order.flatMap(k => this._map.get(k)!);
     }
-
-    //getAllByOrderDesc mute le tableau de retour
-    //.reverse() est in-place en JS — il inverse _order lui-même si 
-    // on ne fait pas attention. Ici c'est safe car .map() crée un nouveau tableau avant le .reverse(), 
-    // mais c'est un piège classique à noter :
 
     getAllByOrderDesc() : T[]
     {
-        return this._order.map(k => this._map.get(k)!).reverse();
+        this.sort();
+        return this._order.flatMap(k => this._map.get(k)!).reverse();
     }
 
-    //Logique ? : getHighest / getLowest lèvent une erreur mais sont typées | undefined
-    getHighest() : T | undefined
+    getHighest() : T[] | undefined
     {
-        if(this.isEmpty())
-            throw new Error("Sorted map is empty");
+        if(this.isEmpty()) return undefined;
 
+        this.sort();
         return this._map.get(this._order[this._order.length - 1]);
     }
-
-    getLowest() : T | undefined
+    getLowest() : T[] | undefined
     {
-        if(this.isEmpty())
-            throw new Error("Sorted map is empty");
-        
+        if(this.isEmpty()) return undefined;
+
+        this.sort();
         return this._map.get(this._order[0]);
     }
 
-    private sort() : void
-    {
-        this._order = [...this._map.keys()];
-        this._order.sort((a, b) => a - b);
-    }
-    //C'est une info utile pour le caller, pas de raison de la garder privée
-    private isEmpty() : boolean
+    isEmpty() : boolean
     {
         return this._order.length <= 0;
     }
+
+    //PRIVATES
+    private sort() : void
+    {
+        if(this._isSorted) return;
+
+        this._order = [...this._map.keys()];
+        this._order.sort((a, b) => a - b);
+
+        this._isSorted=true;
+    }
+
 }
