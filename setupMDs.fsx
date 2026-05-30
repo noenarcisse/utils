@@ -1,9 +1,22 @@
 open System.IO
-
+open System.Collections.Generic
 //WIP script auto generate md files
+
+
+type FilePath = string
+//mut dic
+let dico =  Dictionary<string, FilePath>()
+
+
 
 let excludes = Set.ofList  [".git"]
 let searchOpt = SearchOption.AllDirectories
+
+let getFileName (path:string) = 
+    Path.GetFileNameWithoutExtension(path)
+
+let getFileExt (path:string) = 
+    Path.GetExtension(path)
 
 let containsExclude (fileName : string) =
     excludes |> Set.exists(fun e -> fileName.Contains(e)) 
@@ -23,9 +36,26 @@ let listFilesFlat (list : string list) =
     list 
     |> List.collect (fun e -> Directory.EnumerateFiles(e) |> Seq.toList) //flatmap
 
+//for dictionnary sorting
+let getLanguageDir (path:string) =
+    path.[2..]
+    |> Path.GetDirectoryName
+    |> fun pathDir -> pathDir.Split(Path.DirectorySeparatorChar)
+    |> Array.head
+
+let bagInDict (dir:string)(fp : FilePath) =
+    //TODO
+    dico[dir] <- fp
+    ()
 
 printfn "DIRS:"
-displayList (listDirs ".")
+"."
+|> listDirs 
+|> displayList
+
 
 printfn "FILES:"
-displayList (listDirs "." |> listFilesFlat)
+"."
+|> listDirs  
+|> listFilesFlat
+//|> List.iter(fun f -> getLanguageDir f |> printfn "%s")
