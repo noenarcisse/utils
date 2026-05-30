@@ -4,13 +4,13 @@
   [C# utilities](https://github.com/noenarcisse/utils/tree/main/Csharp/)
 
 ## F#
-[F# utilities](https://github.com/noenarcisse/utils/tree/main/FeeFarp/)
+  [F# utilities](https://github.com/noenarcisse/utils/tree/main/FeeFarp/)
 
 ## Go
-  [Typescript utilities](https://github.com/noenarcisse/utils/tree/main/go)
+  [Go utilities](https://github.com/noenarcisse/utils/tree/main/go)
 
 ## Python
-[Typescript utilities](https://github.com/noenarcisse/utils/tree/main/py)
+  [Python utilities](https://github.com/noenarcisse/utils/tree/main/py)
 
 ## TS
   [Typescript utilities](https://github.com/noenarcisse/utils/tree/main/ts)
