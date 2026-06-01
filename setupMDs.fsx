@@ -1,13 +1,11 @@
 open System.IO
+//unused, mut dictionnary precedent
 open System.Collections.Generic
 //WIP script auto generate md files
 
-
-type FilePath = string
-//mut dic
-let dico =  Dictionary<string, List<FilePath>>()
-
-
+//alias unused
+//type FilePath = string
+//s'il faut faire ca facile type File = {name string, ext string} pour pas appeler des func en boucle sur un path
 
 let excludes = Set.ofList  [".git" ; "README.md" ; "package"]
 let searchOpt = SearchOption.AllDirectories
@@ -39,44 +37,28 @@ let listFilesFlat (list : string list) =
 
 //for dictionnary sorting
 let getLanguageDir (path:string) =
-    path.[2..]
+    path.[2..] // ghetto, c'est vraiment pour forcer le ./ en moins du nom comme je part en path rel
     |> Path.GetDirectoryName
     |> fun pathDir -> pathDir.Split Path.DirectorySeparatorChar
     |> Array.head
 
-let bagInDict (path:string) =
-    let dir = path |> getLanguageDir
 
-    if not(dico.ContainsKey dir) then
-        dico[dir] <- List<FilePath>()
-
-    let fp = path |> getFileName
-    dico[dir].Add(fp)
-    ()
-
-let makeDictImut (dico : Dictionary<string, List<FilePath>>) =
-    dico
-    |> Seq.map(fun kv -> kv.Key, kv.Value|>List.ofSeq) //aled
-    |> Map.ofSeq //boom imut allez ciao!
-
-let displayFolderAndFile (path:string) =
-   $"[{getLanguageDir path}] {getFileName path}"
-
-// printfn "DIRS:"
-// "."
-// |> listDirs 
-// |> displayList
+let createDict (paths: string list) =
+    paths 
+    |> List.toSeq
+    |> Seq.groupBy getLanguageDir
+    |> Seq.map(fun (dir, fileNames)-> dir, fileNames |> Seq.toList)
+    |> Map.ofSeq
+        
+let displayFileWithExt (path:string) =
+   $"{getFileName path}{getFileExt path}"
 
 
-// printfn "FILES:"
+
+printfn "FILES MAP:"
+
 "."
 |> listDirs  
 |> listFilesFlat
-|> List.iter(fun f -> bagInDict f)
-//|> List.iter(fun f-> printfn "%s" (displayFolderAndFile f))
-//|> List.iter(fun f -> getLanguageDir f |> printfn "%s")
-
-printfn "DICT:"
-dico
-|> makeDictImut
-|> Map.iter(fun k v -> printfn "[%s] %A" k v)
+|> createDict
+|> Map.iter(fun k v -> printfn "[%s] %A" k (v|>List.map(fun f -> displayFileWithExt f)))
