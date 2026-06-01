@@ -21,14 +21,8 @@ let containsExclude (fileName : string) =
 
 let listDirs path= 
     Directory.EnumerateDirectories(path , "*", searchOpt)
-    |> Seq.filter(fun f -> f |> containsExclude |> not)
+    |> Seq.filter (containsExclude >> not)
     |> Seq.toList
-
-
-let displayList list =
-    list
-    |> List.iter(fun e -> printfn "%s" e)
-
 
 let listFilesFlat (list : string list) =
     list 
@@ -37,6 +31,7 @@ let listFilesFlat (list : string list) =
 
 //for dictionnary sorting
 let getLanguageDir (path:string) =
+    //Path.GetRelativePath ? pour safe
     path.[2..] // ghetto, c'est vraiment pour forcer le ./ en moins du nom comme je part en path rel
     |> Path.GetDirectoryName
     |> fun pathDir -> pathDir.Split Path.DirectorySeparatorChar
@@ -50,9 +45,7 @@ let createDict (paths: string list) =
     |> Seq.map(fun (dir, fileNames)-> dir, fileNames |> Seq.toList)
     |> Map.ofSeq
         
-let displayFileWithExt (path:string) =
-   $"{getFileName path}{getFileExt path}"
-
+let displayFileWithExt (path:string) = $"{getFileName path}{getFileExt path}"
 
 
 printfn "FILES MAP:"
