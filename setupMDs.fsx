@@ -54,4 +54,4 @@ printfn "FILES MAP:"
 |> listDirs  
 |> listFilesFlat
 |> createDict
-|> Map.iter(fun k v -> printfn "[%s] %A" k (v|>List.map(fun f -> displayFileWithExt f)))
+|> Map.iter(fun k v -> printfn "[%s] %A" k (v|>List.map displayFileWithExt))
