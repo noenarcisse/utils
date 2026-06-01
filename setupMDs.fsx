@@ -1,23 +1,14 @@
 open System.IO
-//unused, mut dictionnary precedent
-open System.Collections.Generic
 //WIP script auto generate md files
-
-//alias unused
-//type FilePath = string
 //s'il faut faire ca facile type File = {name string, ext string} pour pas appeler des func en boucle sur un path
 
 let excludes = Set.ofList  [".git" ; "README.md" ; "package"]
 let searchOpt = SearchOption.AllDirectories
 
-let getFileName (path:string) = 
-    Path.GetFileNameWithoutExtension(path)
-
-let getFileExt (path:string) = 
-    Path.GetExtension(path)
-
-let containsExclude (fileName : string) =
-    excludes |> Set.exists(fun e -> fileName.Contains(e)) 
+let getFileName (path:string) = Path.GetFileNameWithoutExtension(path)
+let getFileExt (path:string) = Path.GetExtension(path)
+let containsExclude (fileName : string) = excludes |> Set.exists fileName.Contains
+let displayFileWithExt (path:string) = $"{getFileName path}{getFileExt path}"
 
 let listDirs path= 
     Directory.EnumerateDirectories(path , "*", searchOpt)
@@ -26,8 +17,8 @@ let listDirs path=
 
 let listFilesFlat (list : string list) =
     list 
-    |> List.collect (fun e -> Directory.EnumerateFiles e |> Seq.toList) //flatmap
-    |> List.filter(fun f -> containsExclude f|> not)
+    |> List.collect ( Directory.EnumerateFiles  >> Seq.toList) //flatmap
+    |> List.filter(containsExclude >> not)
 
 //for dictionnary sorting
 let getLanguageDir (path:string) =
@@ -45,8 +36,6 @@ let createDict (paths: string list) =
     |> Seq.map(fun (dir, fileNames)-> dir, fileNames |> Seq.toList)
     |> Map.ofSeq
         
-let displayFileWithExt (path:string) = $"{getFileName path}{getFileExt path}"
-
 
 printfn "FILES MAP:"
 
@@ -54,4 +43,4 @@ printfn "FILES MAP:"
 |> listDirs  
 |> listFilesFlat
 |> createDict
-|> Map.iter(fun k v -> printfn "[%s] %A" k (v|>List.map displayFileWithExt))
+|> Map.iter(fun k v -> printfn "[%s] %A" k (v |> List.map displayFileWithExt))
