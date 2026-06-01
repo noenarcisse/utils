@@ -5,11 +5,11 @@ open System.Collections.Generic
 
 type FilePath = string
 //mut dic
-let dico =  Dictionary<string, FilePath>()
+let dico =  Dictionary<string, List<FilePath>>()
 
 
 
-let excludes = Set.ofList  [".git"]
+let excludes = Set.ofList  [".git" ; "README.md" ; "package"]
 let searchOpt = SearchOption.AllDirectories
 
 let getFileName (path:string) = 
@@ -34,28 +34,49 @@ let displayList list =
 
 let listFilesFlat (list : string list) =
     list 
-    |> List.collect (fun e -> Directory.EnumerateFiles(e) |> Seq.toList) //flatmap
+    |> List.collect (fun e -> Directory.EnumerateFiles e |> Seq.toList) //flatmap
+    |> List.filter(fun f -> containsExclude f|> not)
 
 //for dictionnary sorting
 let getLanguageDir (path:string) =
     path.[2..]
     |> Path.GetDirectoryName
-    |> fun pathDir -> pathDir.Split(Path.DirectorySeparatorChar)
+    |> fun pathDir -> pathDir.Split Path.DirectorySeparatorChar
     |> Array.head
 
-let bagInDict (dir:string)(fp : FilePath) =
-    //TODO
-    dico[dir] <- fp
+let bagInDict (path:string) =
+    let dir = path |> getLanguageDir
+
+    if not(dico.ContainsKey dir) then
+        dico[dir] <- List<FilePath>()
+
+    let fp = path |> getFileName
+    dico[dir].Add(fp)
     ()
 
-printfn "DIRS:"
-"."
-|> listDirs 
-|> displayList
+let makeDictImut (dico : Dictionary<string, List<FilePath>>) =
+    dico
+    |> Seq.map(fun kv -> kv.Key, kv.Value|>List.ofSeq) //aled
+    |> Map.ofSeq //boom imut allez ciao!
+
+let displayFolderAndFile (path:string) =
+   $"[{getLanguageDir path}] {getFileName path}"
+
+// printfn "DIRS:"
+// "."
+// |> listDirs 
+// |> displayList
 
 
-printfn "FILES:"
+// printfn "FILES:"
 "."
 |> listDirs  
 |> listFilesFlat
+|> List.iter(fun f -> bagInDict f)
+//|> List.iter(fun f-> printfn "%s" (displayFolderAndFile f))
 //|> List.iter(fun f -> getLanguageDir f |> printfn "%s")
+
+printfn "DICT:"
+dico
+|> makeDictImut
+|> Map.iter(fun k v -> printfn "[%s] %A" k v)
