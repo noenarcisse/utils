@@ -45,8 +45,8 @@ let formatFiles (f: string -> string) (list : string list) =
 let formatDic (dic:Map<string, string list>) =
     let str = StringBuilder()
     for k in dic.Keys do
-        str.AppendLine("# "+k) |> ignore
-        str.AppendLine(String.Join(",", formatFiles getFileName dic[k])) |> ignore
+        str.AppendLine("## "+k) |> ignore
+        str.AppendLine(String.Join("<br>", formatFiles Path.GetFileName dic[k])) |> ignore
         str.AppendLine() |> ignore
     
     str.ToString()
