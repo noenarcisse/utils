@@ -1,6 +1,7 @@
 open System.IO
+open System.Text
+open System
 //WIP script auto generate md files
-//s'il faut faire ca facile type File = {name string, ext string} pour pas appeler des func en boucle sur un path
 
 let excludes = Set.ofList  [".git" ; "README.md" ; "package"]
 let searchOpt = SearchOption.AllDirectories
@@ -35,12 +36,34 @@ let createDict (paths: string list) =
     |> Seq.groupBy getLanguageDir
     |> Seq.map(fun (dir, fileNames)-> dir, fileNames |> Seq.toList)
     |> Map.ofSeq
-        
 
+//TESTING
+let formatFiles (f: string -> string) (list : string list) =
+    list
+    |> List.map(fun e -> f(e))
+
+let formatDic (dic:Map<string, string list>) =
+    let str = StringBuilder()
+    for k in dic.Keys do
+        str.AppendLine("# "+k) |> ignore
+        str.AppendLine(String.Join(",", formatFiles getFileName dic[k])) |> ignore
+        str.AppendLine() |> ignore
+    
+    str.ToString()
+
+let createInventoryFile (dic : Map<string,string list>) =
+    let str = dic |> formatDic
+    File.WriteAllText("./test.md", str)
+    dic     
+
+
+//RESULT
 printfn "FILES MAP:"
 
 "."
 |> listDirs  
 |> listFilesFlat
 |> createDict
+|> createInventoryFile
 |> Map.iter(fun k v -> printfn "[%s] %A" k (v |> List.map displayFileWithExt))
+
