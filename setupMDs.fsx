@@ -3,6 +3,11 @@ open System.Text
 open System
 //WIP script auto generate md files
 
+let stopWatch = System.Diagnostics.Stopwatch.StartNew()
+
+
+let saveFileName = "./test.md"
+
 let excludes = Set.ofList  [".git" ; "README.md" ; "package"]
 let searchOpt = SearchOption.AllDirectories
 
@@ -51,11 +56,15 @@ let formatDic (dic:Map<string, string list>) =
     
     str.ToString()
 
-let createInventoryFile (dic : Map<string,string list>) =
+let saveToFile filepath (dic : Map<string,string list>) =
     let str = dic |> formatDic
-    File.WriteAllText("./test.md", str)
+    File.WriteAllText(filepath, str)
     dic     
 
+let displayDict =
+    Map.iter(fun k v -> printfn "[%s] %A" k (v |> List.map displayFileWithExt))
+
+let tee f x = f x; x
 
 //RESULT
 printfn "FILES MAP:"
@@ -64,6 +73,10 @@ printfn "FILES MAP:"
 |> listDirs  
 |> listFilesFlat
 |> createDict
-|> createInventoryFile
-|> Map.iter(fun k v -> printfn "[%s] %A" k (v |> List.map displayFileWithExt))
+|> tee displayDict
+|> saveToFile saveFileName
 
+
+
+stopWatch.Stop()
+printfn "Exec time: %.2fms" stopWatch.Elapsed.TotalMilliseconds
