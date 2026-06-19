@@ -1,4 +1,4 @@
-package loopsutils
+package loops_utils
 
 import (
 	"iter"
