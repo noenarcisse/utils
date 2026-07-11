@@ -21,43 +21,49 @@ let listDirs path=
     |> Seq.filter (containsExclude >> not)
     |> Seq.toList
 
-let listFilesFlat (list : string list) =
-    list 
-    |> List.collect ( Directory.EnumerateFiles  >> Seq.toList) //flatmap
+// en soi ca fonctionne, mais dans la pratique, go utilise plusieurs fichiers dans un dossier
+// pareil en C# sur mon /Tree/ qui utilise plusieurs classes diff pour un meme util
+// ca separe tout de maniere un peu absurde ?
+let listFilesFlat (dirs : string list) =
+    dirs 
+    |> List.collect (Directory.EnumerateFiles >> Seq.toList) //flatmap
     |> List.filter(containsExclude >> not)
 
 //for dictionnary sorting
 let getLanguageDir (path:string) =
-    //Path.GetRelativePath ? pour safe
-    path.[2..] // ghetto, c'est vraiment pour forcer le ./ en moins du nom comme je part en path rel
+    Path.GetRelativePath("./", path)
     |> Path.GetDirectoryName
     |> fun pathDir -> pathDir.Split Path.DirectorySeparatorChar
     |> Array.head
-
+    //|> fun head ->  printfn "%s" head ; head
 
 let createDict (paths: string list) =
-    paths 
-    |> List.toSeq
+    paths |> List.toSeq
     |> Seq.groupBy getLanguageDir
     |> Seq.map(fun (dir, fileNames)-> dir, fileNames |> Seq.toList)
     |> Map.ofSeq
 
 //TESTING
-let formatFiles (f: string -> string) (list : string list) =
-    list
-    |> List.map(fun e -> f(e))
+let formatFiles (f: string -> string) (list : string list) = list |> List.map f
 
-let formatDic (dic:Map<string, string list>) =
+//format pour l'ecriture du fichier .md
+let formatDict (dic:Map<string, string list>) =
     let str = StringBuilder()
+
+    let appendLine (str : string) (s : StringBuilder) : StringBuilder =
+        s.AppendLine str
+
     for k in dic.Keys do
-        str.AppendLine("## "+k) |> ignore
-        str.AppendLine(String.Join("<br>", formatFiles Path.GetFileName dic[k])) |> ignore
-        str.AppendLine() |> ignore
-    
+        str 
+        |> appendLine ("## "+k)
+        |> appendLine $"[{k} utilities](https://github.com/noenarcisse/utils/tree/main/{k}/)"
+        |> appendLine (String.Join("<br>\n", formatFiles Path.GetFileName dic[k]))
+        |> appendLine ""
+        |> ignore
     str.ToString()
 
 let saveToFile filepath (dic : Map<string,string list>) =
-    let str = dic |> formatDic
+    let str = dic |> formatDict
     File.WriteAllText(filepath, str)
     dic     
 
@@ -75,7 +81,6 @@ printfn "FILES MAP:"
 |> createDict
 |> tee displayDict
 |> saveToFile saveFileName
-
 
 
 stopWatch.Stop()
