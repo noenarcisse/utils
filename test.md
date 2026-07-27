@@ -25,6 +25,10 @@ Color.js<br>
 history.js<br>
 perl.utils.js
 
+## nim
+[nim utilities](https://github.com/noenarcisse/utils/tree/main/nim/)
+squeal.nim
+
 ## pl
 [pl utilities](https://github.com/noenarcisse/utils/tree/main/pl/)
 renamer.bat<br>
