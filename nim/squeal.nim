@@ -15,7 +15,9 @@ var sql_tokens = @[
     "like","ilike",
     "cast","extract","to_char",
     "position","substring", "upper","lower","replace", "trim","rtrim","ltrim",
-    "count", "max","min","avg","case","when","else","end","nullif","coalesce"
+    "count", "max","min","avg","case","when","else","end","nullif","coalesce",
+    "left", "right", "outer","inner", "join",
+    "union", "intersct", "except", "on", "in"
     ].toHashSet
 
 var f, f2 : File
@@ -37,24 +39,37 @@ for file in fs :
             var currentWord : seq[char]
 
             while not f.endOfFile() :
-                currentWord = @[]
+                # readline ca ENLEVE le dernier /l
+                #je dois le rajouter a la main en fin de loop
                 let l = f.readLine()
 
                 for c in l :
                     #  parsing here
-                    if c in Whitespace :
+                    if c in Whitespace and currentWord.len() > 0 :
                         var wordStr = currentWord.join()
 
                         if wordStr in sql_tokens :
                             f2&=wordStr.toUpperAscii()
                         else :
-                            f2.write wordStr
+                            f2&=wordStr
                         f2&=c 
                         # on vide quand finito
                         currentWord = @[]
                     else :
                         currentWord.add c
-                f2&='\l' 
+                    
+                #on vide le dernier mot, il est avant le \l
+                # qui est enlevé par le splitLine ici :d
+                if currentWord.len() > 0 :
+                    var wordStr = currentWord.join()
+                    if wordStr in sql_tokens :
+                        f2&=wordStr.toUpperAscii()
+                    else :
+                        f2&=wordStr
+                        
+                f2&='\l'
+                currentWord = @[]
+                 
             # dernier mot on touche possiblement EOF, faut verifier si il est dedans
             if currentWord.join() in sql_tokens :
                 var wordStr = currentWord.join()
