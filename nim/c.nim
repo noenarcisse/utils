@@ -29,4 +29,4 @@ discard execCmd(cmd2)
 
 
 proc printHelp() =
-    echo "c [compilter: t|g] [c file] [args?]"
+    echo "c [compiler: t|g] [c file] [args?]"
