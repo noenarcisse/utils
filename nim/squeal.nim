@@ -5,10 +5,6 @@ import std/paths
 import std/dirs
 import std/files
 
-# bug, les tokens sont pas reconnu apres des \t ?
-# sur du sql indenté ca passe vraiment meme pas sur select
-
-
 var sql_tokens = @[
     "select","from","as","where", "having",
     "order","group","by",
