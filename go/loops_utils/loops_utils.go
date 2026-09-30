@@ -14,14 +14,3 @@ func ByStep(from, step, to int) iter.Seq[int] {
 		}
 	}
 }
-
-// Kt repeat(x)
-func Repeat(n int) iter.Seq[int] {
-	return func(yield func(int) bool) {
-		for i := range n {
-			if !yield(i) {
-				return
-			}
-		}
-	}
-}
