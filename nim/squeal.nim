@@ -5,7 +5,13 @@ import std/paths
 import std/dirs
 import std/files
 
+# manque begin, commit et rollback
+
+# y'a un bug si y'a une sous req avec une parenthese ouvrante where (select * from etc)
+# la parenthese empeche la capture du SELECT
+
 var sql_tokens = @[
+    "create", "alter", "drop", "if", "exists", "table", 
     "select","from","as","where", "having",
     "order","group","by",
     "asc","desc",
@@ -19,15 +25,21 @@ var sql_tokens = @[
     "position","substring", "upper","lower","replace", "trim","rtrim","ltrim",
     "count", "max","min","avg","case","when","else","end","nullif","coalesce",
     "left", "right", "outer","inner", "join","full",
-    "union", "intersct", "except", "on", "in",
+    "union", "intersect", "except", "on", "in",
     "with",
-    "default", "is", "null", "nulls", "last"
+    "default", "is", "not", "null", "nulls", "last",
+    "decimal", "varchar", "char", "int", "boolean", "timestamptz", "uuid", "unique",
+    "constraint", "foreign", "key", "references", "cascade",
+    "begin", "rollback", "commit",
+    "declare", "procedure", "function", "returns"
     ].toHashSet
 
 var f, f2 : File
 var fs : seq[string]
 
-let wd = getCurrentDir()
+let IgnoredChars = Whitespace + {'(', ')', ';'}
+
+let wd = getCurrentDir() # OSError non gérée
 for e in walkDir(wd) :
     if e.kind != pcFile : continue
     let (_,filename,ext) = splitFile(e.path)
@@ -49,7 +61,7 @@ for file in fs :
 
                 for c in l :
                     #  parsing here
-                    if c in Whitespace and currentWord.len() > 0 :
+                    if c in IgnoredChars and currentWord.len() > 0 :
                         var wordStr = currentWord.join()
 
                         
@@ -61,7 +73,7 @@ for file in fs :
                         f2&=c 
                         # on vide quand finito
                         currentWord = @[]
-                    elif c in Whitespace :
+                    elif c in IgnoredChars :
                         f2&=c
                     else :
                         currentWord.add c
@@ -91,5 +103,5 @@ for file in fs :
     else :
         echo "Impossible d'ouvrir le fichier"
 
-    moveFile(Path("tmp_"&file), Path(file))
+    moveFile(Path("tmp_"&file), Path(file)) # exeption non gérée?
 #end foreach files
